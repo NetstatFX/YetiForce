@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  yetiforce:
+    image: netfx/yetiforce:latest
+    container_name: yetiforce
+    volumes:
+      - ./app:/var/www/html
+    labels:
+      - "traefik.backend=yetiforce"
+      - "traefik.frontend.rule=Host:crm.changeme.com"
+      - "traefik.frontend.headers.customResponseHeaders=max-age=31536000; includeSubDomains; preload"
+      - "traefik.frontend.headers.referrerPolicy=no-referrer"
+      - "traefik.frontend.redirect.entryPoint=https"
+      - "traefik.port=80"
+      - "traefik.frontend.passHostHeader=true"
+      - "traefik.enable=true"
+    networks:
+      - traefik
+    restart: always
+
+networks:
+  traefik:
+    external: true
